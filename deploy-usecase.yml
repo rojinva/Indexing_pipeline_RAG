@@ -1,0 +1,323 @@
+trigger: none
+
+# A runtime parameter to be passed by user - Enter the use case name to be deployed
+parameters:
+- name: selectedUsecaseName
+  displayName: "Enter the Use Case Name you want to deploy"
+  type: string
+  default: ''
+
+pool:
+  name: DSML-pool
+
+variables:
+- name:  search-service-restapi-version
+  value: '2024-03-01-preview'
+- name: adls_folder_name
+  value: "${{ parameters.selectedUsecaseName }}"
+- name: suffix
+  value: "-${{ parameters.selectedUsecaseName }}"
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/dev') }}:
+  - name: service-connection
+    value: 'lam-devops-dshub-dev-conn'
+  - name: keyvault-name
+    value: 'kvlamuswoaideveng01'
+  - name: search-service-name
+    value: 'srch-lam-usw-oai-dev-eng-03'
+  - name: function-app-name
+    value: 'fn-lam-usw-oai-dev-eng-01'
+  - name: function-name
+    value: 'CustomSplitSkill'
+  - name: recipe-function-name
+    value: 'RecipeRunnerAlphaSkill'
+  - name: oai-resource-uri
+    value: 'https://oai-lam-use-dfab-dev-eng-001.openai.azure.com/'
+  - name: oai-use2-resource-uri
+    value: 'https://oai-lam-use2-dfab-dev-eng-001.openai.azure.com/'
+  - name: secrets-to-fetch-from-keyvault
+    value: 'openai-fabric-sql-connectionstring,fn-app-reciperunnerskill-key,openai-km-acs-cfpa-datasource-connection,openai-synapse-sql-table-rpt-rng-c2c3nexus,openai-synapse-sql-table-mfgops-nci,openai-synapse-sql-query-mfgops-nci,openai-synapse-sql-table-mfgops-lmm-es-malasiya,openai-synapse-sql-query-mfgops-lmm-es-malasiya,openai-synapse-sql-table-mfgops-te,openai-synapse-sql-query-mfgops-te,openai-synapse-sql-table-mfgops-vfd,openai-synapse-sql-query-mfgops-vfd,fn-app-customsplitskill-key,openai-synapse-sql-table-nce-live,openai-synapse-sql-query-nce-live,openai-acs-search-service-key,openai-acs-search-service-03-key,openai-km-acs-datasource-connection,openai-use-api-key,openai-use2-api-key,openai-synapse-connectionstring,openai-synapse-sql-query-escalation-solver,openai-synapse-sql-query-cos,openai-synapse-sql-query-escalation-solver-cci,openai-synapse-sql-query-problem-reports,openai-synapse-sql-table-escalation-solver,openai-synapse-sql-view-escalation-solver,openai-synapse-sql-table-problem-reports,openai-synapse-sql-table-cos,openai-synapse-sql-table-problem-reports-design-insights,openai-synapse-sql-query-problem-reports-design-insights,openai-synapse-sql-table-wbt-course-description-structured,openai-synapse-sql-query-wbt-course-description-structured,openai-synapse-sql-table-design-review-design-insights,openai-synapse-sql-query-design-review-design-insights,openai-synapse-sql-table-escalation-tickets,openai-synapse-sql-query-escalation-tickets,openai-synapse-sql-table-iplm-problem-report,openai-synapse-sql-query-iplm-problem-report,openai-synapse-sql-table-8d-grid,openai-synapse-sql-query-8d-grid,openai-synapse-sql-table-parts-design-insights,openai-synapse-sql-query-parts-design-insights,openai-synapse-sql-query-change-order-design-insights,openai-synapse-sql-table-change-order-design-insights,openai-synapse-sql-query-design-workspace,openai-synapse-sql-table-design-workspace,openai-synapse-sql-query-material-drawing,openai-synapse-sql-table-material-drawing,openai-synapse-sql-table-rpt-rng,openai-synapse-sql-table-rpt-track,openai-synapse-sql-table-rpt-wiki,openai-synapse-sql-table-escalation-solver-view,openai-synapse-sql-table-escalation-solver-cci-view,openai-synapse-sql-table-nce-live-view,openai-synapse-sql-table-intelpassdown-cci-view'
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/qa') }}:
+  - name: service-connection
+    value: 'lam-devops-dshub-qa-conn'
+  - name: keyvault-name
+    value: 'kvlamuswoaiqaeng01'
+  - name: search-service-name
+    value: 'srch-lam-usw-oai-qa-eng-03'
+  - name: function-app-name
+    value: 'fn-lam-usw-oai-qa-eng-01'
+  - name: function-name
+    value: 'CustomSplitSkill'
+  - name: recipe-function-name
+    value: 'RecipeRunnerAlphaSkill'
+  - name: oai-resource-uri
+    value: 'https://oai-lam-use-dfab-qa-eng-001.openai.azure.com/'
+  - name: oai-use2-resource-uri
+    value: 'https://oai-lam-use2-dfab-qa-eng-001.openai.azure.com/'
+  - name: secrets-to-fetch-from-keyvault
+    value: 'openai-fabric-sql-connectionstring,fn-app-reciperunnerskill-key,openai-km-acs-cfpa-datasource-connection,openai-synapse-sql-table-rpt-rng-c2c3nexus,openai-synapse-sql-table-mfgops-nci,openai-synapse-sql-query-mfgops-nci,openai-synapse-sql-table-mfgops-lmm-es-malasiya,openai-synapse-sql-query-mfgops-lmm-es-malasiya,openai-synapse-sql-table-mfgops-te,openai-synapse-sql-query-mfgops-te,openai-synapse-sql-table-mfgops-vfd,openai-synapse-sql-query-mfgops-vfd,fn-app-customsplitskill-key,openai-acs-search-service-key,openai-acs-search-service-03-key,openai-km-acs-datasource-connection,openai-use-api-key,openai-use2-api-key,openai-synapse-connectionstring,openai-synapse-sql-query-escalation-solver,openai-synapse-sql-query-cos,openai-synapse-sql-query-escalation-solver-cci,openai-synapse-sql-query-problem-reports,openai-synapse-sql-table-escalation-solver,openai-synapse-sql-view-escalation-solver,openai-synapse-sql-view-escalation-solver,openai-synapse-sql-table-problem-reports,openai-synapse-sql-table-cos,openai-synapse-sql-table-problem-reports-design-insights,openai-synapse-sql-query-problem-reports-design-insights,openai-synapse-sql-table-wbt-course-description-structured,openai-synapse-sql-query-wbt-course-description-structured,openai-synapse-sql-table-design-review-design-insights,openai-synapse-sql-query-design-review-design-insights, openai-synapse-sql-table-parts-design-insights,openai-synapse-sql-query-parts-design-insights,openai-synapse-sql-query-8d-grid,openai-synapse-sql-table-8d-grid,openai-synapse-sql-query-escalation-tickets,openai-synapse-sql-table-escalation-tickets,openai-synapse-sql-query-iplm-problem-report,openai-synapse-sql-table-iplm-problem-report,openai-synapse-sql-query-nce-live,openai-synapse-sql-table-nce-live,openai-synapse-sql-query-change-order-design-insights,openai-synapse-sql-table-change-order-design-insights,openai-synapse-sql-query-design-workspace,openai-synapse-sql-table-design-workspace,openai-synapse-sql-query-material-drawing,openai-synapse-sql-table-material-drawing,openai-synapse-sql-table-rpt-rng,openai-synapse-sql-table-rpt-track,openai-synapse-sql-table-rpt-wiki,openai-synapse-sql-table-escalation-solver-view,openai-synapse-sql-table-escalation-solver-cci-view,openai-synapse-sql-table-nce-live-view' 
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
+  - name: service-connection
+    value: 'lam-devops-dshub-prd-conn'
+  - name: keyvault-name
+    value: 'kvlamuswoaiprdeng01'
+  - name: search-service-name
+    value: 'srch-lam-usw-oai-prd-eng-02'
+  - name: function-app-name
+    value: 'fn-lam-usw-oai-prd-eng-01'
+  - name: function-name
+    value: 'CustomSplitSkill'
+  - name: oai-resource-uri
+    value: 'https://oai-lam-use-dfab-prd-eng-001.openai.azure.com/'
+  - name: oai-use2-resource-uri
+    value: 'https://oai-lam-use2-dfab-prd-eng-001.openai.azure.com/'  
+  - name: secrets-to-fetch-from-keyvault
+    value: 'openai-fabric-sql-connectionstring,fn-app-customsplitskill-key,openai-acs-search-service-key,openai-synapse-sql-table-rpt-rng-c2c3nexus,openai-km-acs-datasource-connection,openai-use-api-key,openai-use2-api-key,openai-synapse-connectionstring,openai-synapse-sql-query-escalation-solver,openai-synapse-sql-query-cos,openai-synapse-sql-query-escalation-solver-cci,openai-synapse-sql-query-problem-reports,openai-synapse-sql-table-escalation-solver,openai-synapse-sql-view-escalation-solver,openai-synapse-sql-table-problem-reports,openai-synapse-sql-table-cos,openai-synapse-sql-table-wbt-course-description-structured,openai-synapse-sql-query-wbt-course-description-structured,openai-synapse-sql-table-iplm-problem-report,openai-synapse-sql-query-iplm-problem-report,openai-synapse-sql-table-nce-live,openai-synapse-sql-query-nce-live,openai-synapse-sql-table-escalation-tickets,openai-synapse-sql-query-escalation-tickets,openai-synapse-sql-table-8d-grid,openai-synapse-sql-query-8d-grid,openai-synapse-sql-table-parts-design-insights,openai-synapse-sql-query-parts-design-insights,openai-synapse-sql-table-design-review-design-insights,openai-synapse-sql-query-design-review-design-insights,openai-synapse-sql-query-change-order-design-insights,openai-synapse-sql-table-change-order-design-insights,openai-synapse-sql-query-material-drawing,openai-synapse-sql-table-material-drawing,openai-synapse-sql-table-rpt-rng,openai-synapse-sql-table-rpt-track,openai-synapse-sql-table-rpt-wiki,openai-synapse-sql-table-escalation-solver-view,openai-synapse-sql-table-escalation-solver-cci-view,openai-synapse-sql-table-nce-live-view' 
+
+jobs:
+  - job: ValidateUseCase
+    displayName: 'Validate selected usecase ${{ parameters.selectedUsecaseName }}'
+    steps:
+    - script: |
+        echo "Listing available use cases in the usecases directory"
+        directory_path="src/search_service/usecases/"
+          # List all folders in the specified directory
+        for folder in "$directory_path"*/ ; do
+          # remove trailing slash from the folder name
+          folder_name=$(basename "$folder")
+          echo "$folder_name"  >>  usecases_list.txt
+        done 
+
+          # Read the available use cases into an array
+        mapfile -t available_usecases < usecases_list.txt
+          # Display available use cases
+        echo "## Available Use Cases: "
+        count=1
+        for usecase in "${available_usecases[@]}"; do
+          echo "$usecase"
+          count=$((count + 1))
+        done
+            
+            # Validate if selected usecase passed at runtime is among the list of available usecases
+        is_in_array() {
+          local element
+          for element in "${available_usecases[@]}"; do
+            if [[ "$element" == "${{ parameters.selectedUsecaseName }}" ]]; then
+             return 0 # Return 0 (true) if the selected usecase is found
+            fi
+          done
+          return 1 # Return 1 (false) if the selected usecase is not found  
+        }
+          #Validate the selected usecase
+        if is_in_array; then
+          echo "The selected Usecase that will be deployed is: ${{ parameters.selectedUsecaseName }}"
+        else
+          echo "Error: The selected usecase ${{ parameters.selectedUsecaseName }} is not among the list of available use cases, check the log for list of available uses and rerun the pipeline" 
+          exit 1 
+        fi  
+      displayName: 'Validate selected usecase'
+
+  - job: DeployUseCase
+    displayName: 'Deploy ${{ parameters.selectedUsecaseName }} ACS definitions'
+    steps:
+      - checkout: self
+        submodules: true
+
+      - task: AzureKeyVault@2
+        displayName: 'Fetch Secrets from KeyVault'
+        inputs:
+          azureSubscription: ${{ variables['service-connection'] }}
+          KeyVaultName: $(keyvault-name)
+          SecretsFilter: $(secrets-to-fetch-from-keyvault)
+          RunAsPreJob: true
+
+      - script: |
+          pwd
+          ls
+          
+          searchServiceBaseURL="https://$(search-service-name).search.windows.net"
+          # Set the apiKey based on the environment
+          if [[ "$(Build.SourceBranch)" == "refs/heads/dev" || "$(Build.SourceBranch)" == "refs/heads/qa" ]]; then
+            apiKey=$(openai-acs-search-service-03-key)
+          else
+            apiKey=$(openai-acs-search-service-key)
+          fi
+
+          ##############################################################
+          # Extract the names of the ACS definitions and append them with a suffix
+          ##############################################################
+          
+          # Process data_source_definition.json ########################
+          ##############################################################
+          dataSourceName=$(cat ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json | jq -r '.name')
+          dataSourceName_updated="$dataSourceName"$(suffix)
+          sed -i "s|\"name\": \"$dataSourceName\"|\"name\": \"$dataSourceName_updated\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          datasourceJSON=$(cat ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json)
+          echo "Edited data source json: $datasourceJSON"
+          
+          # Process index_definition.json ########################
+          ##############################################################
+          indexName=$(cat ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/index_definition.json | jq -r '.name')
+          indexName_updated="$indexName"$(suffix)
+          sed -i "s|\"name\": \"$indexName\"|\"name\": \"$indexName_updated\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/index_definition.json
+          indexJSON=$(cat ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/index_definition.json)
+          #echo "Edited index json: $indexJSON"
+          
+          # Process indexer_definition.json ########################
+          ##############################################################
+          indexerName=$(cat ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/indexer_definition.json | jq -r '.name')
+          indexerName_updated="$indexerName"$(suffix)
+          sed -i "s|\"name\": \"$indexerName\"|\"name\": \"$indexerName_updated\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/indexer_definition.json
+          dataSourceName=$(cat ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/indexer_definition.json | jq -r '.dataSourceName')
+          dataSourceName_updated="$dataSourceName"$(suffix)
+          sed -i "s|\"dataSourceName\": \"$dataSourceName\"|\"dataSourceName\": \"$dataSourceName_updated\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/indexer_definition.json
+          skillsetName=$(cat ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/indexer_definition.json | jq -r '.skillsetName')
+          skillsetName_updated="$skillsetName"$(suffix)
+          sed -i "s|\"skillsetName\": \"$skillsetName\"|\"skillsetName\": \"$skillsetName_updated\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/indexer_definition.json
+          targetIndexName=$(cat ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/indexer_definition.json | jq -r '.targetIndexName')
+          targetIndexName_updated="$targetIndexName"$(suffix)
+          sed -i "s|\"targetIndexName\": \"$targetIndexName\"|\"targetIndexName\": \"$targetIndexName_updated\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/indexer_definition.json
+          indexerJSON=$(cat ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/indexer_definition.json)
+          echo "Edited indexer json: $indexerJSON"
+          
+          # Process skillset_definition.json ########################
+          ##############################################################
+          skillsetName=$(cat ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/skillset_definition.json | jq -r '.name')
+          skillsetName_updated="$skillsetName"$(suffix)
+          sed -i "s|\"name\": \"$skillsetName\"|\"name\": \"$skillsetName_updated\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/skillset_definition.json
+          targetIndexName=$(cat ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/skillset_definition.json | jq -r '.indexProjections.selectors[0].targetIndexName')
+          echo "targetIndexName: $targetIndexName"
+          targetIndexName_updated="$targetIndexName"$(suffix)
+          echo "targetIndexName_updated: $targetIndexName_updated"
+          sed -i "s|\"targetIndexName\": \"$targetIndexName\"|\"targetIndexName\": \"$targetIndexName_updated\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/skillset_definition.json
+          skillsetJSON=$(cat ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/skillset_definition.json)
+          echo "Edited skillset json: $skillsetJSON"
+          
+          ##############################################################
+          # Populate environment specific values for the ACS definitions
+          ##############################################################
+
+          # Populate data_source_definition.json with storage account connection string for synapse database.
+          sed -i "s|\"connectionString\": \"openai-fabric-sql-connectionstring\"|\"connectionString\": \"$(openai-fabric-sql-connectionstring)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"connectionString\": \"openai-synapse-connectionstring\"|\"connectionString\": \"$(openai-synapse-connectionstring)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"query\": \"openai-synapse-sql-query-escalation-solver\"|\"query\": \"$(openai-synapse-sql-query-escalation-solver)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"query\": \"openai-synapse-sql-query-escalation-solver-cci\"|\"query\": \"$(openai-synapse-sql-query-escalation-solver-cci)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-escalation-solver\"|\"name\": \"$(openai-synapse-sql-table-escalation-solver)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-view-escalation-solver\"|\"name\": \"$(openai-synapse-sql-view-escalation-solver)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"query\": \"openai-synapse-sql-query-mfgops-te\"|\"query\": \"$(openai-synapse-sql-query-mfgops-te)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-mfgops-te\"|\"name\": \"$(openai-synapse-sql-table-mfgops-te)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json        
+          sed -i "s|\"query\": \"openai-synapse-sql-query-mfgops-lmm-es-malasiya\"|\"query\": \"$(openai-synapse-sql-query-mfgops-lmm-es-malasiya)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-mfgops-lmm-es-malasiya\"|\"name\": \"$(openai-synapse-sql-table-mfgops-lmm-es-malasiya)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"query\": \"openai-synapse-sql-query-mfgops-nci\"|\"query\": \"$(openai-synapse-sql-query-mfgops-nci)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-mfgops-nci\"|\"name\": \"$(openai-synapse-sql-table-mfgops-nci)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-rpt-rng-c2c3nexus\"|\"name\": \"$(openai-synapse-sql-table-rpt-rng-c2c3nexus)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"query\": \"openai-synapse-sql-query-mfgops-vfd\"|\"query\": \"$(openai-synapse-sql-query-mfgops-vfd)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-mfgops-vfd\"|\"name\": \"$(openai-synapse-sql-table-mfgops-vfd)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json  
+          sed -i "s|\"query\": \"openai-synapse-sql-query-8d-grid\"|\"query\": \"$(openai-synapse-sql-query-8d-grid)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-8d-grid\"|\"name\": \"$(openai-synapse-sql-table-8d-grid)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json  
+          sed -i "s|\"query\": \"openai-synapse-sql-query-escalation-tickets\"|\"query\": \"$(openai-synapse-sql-query-escalation-tickets)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-escalation-tickets\"|\"name\": \"$(openai-synapse-sql-table-escalation-tickets)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json  
+          sed -i "s|\"query\": \"openai-synapse-sql-query-iplm-problem-report\"|\"query\": \"$(openai-synapse-sql-query-iplm-problem-report)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-iplm-problem-report\"|\"name\": \"$(openai-synapse-sql-table-iplm-problem-report)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json  
+          sed -i "s|\"query\": \"openai-synapse-sql-query-nce-live\"|\"query\": \"$(openai-synapse-sql-query-nce-live)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-nce-live\"|\"name\": \"$(openai-synapse-sql-table-nce-live)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json   
+          sed -i "s|\"query\": \"openai-synapse-sql-query-cos\"|\"query\": \"$(openai-synapse-sql-query-cos)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-cos\"|\"name\": \"$(openai-synapse-sql-table-cos)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json  
+          sed -i "s|\"query\": \"openai-synapse-sql-query-problem-reports\"|\"query\": \"$(openai-synapse-sql-query-problem-reports)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-problem-reports\"|\"name\": \"$(openai-synapse-sql-table-problem-reports)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json 
+          sed -i "s|\"query\": \"openai-synapse-sql-query-problem-reports-design-insights\"|\"query\": \"$(openai-synapse-sql-query-problem-reports-design-insights)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-problem-reports-design-insights\"|\"name\": \"$(openai-synapse-sql-table-problem-reports-design-insights)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"query\": \"openai-synapse-sql-query-parts-design-insights\"|\"query\": \"$(openai-synapse-sql-query-parts-design-insights)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-parts-design-insights\"|\"name\": \"$(openai-synapse-sql-table-parts-design-insights)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"query\": \"openai-synapse-sql-query-change-order-design-insights\"|\"query\": \"$(openai-synapse-sql-query-change-order-design-insights)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-change-order-design-insights\"|\"name\": \"$(openai-synapse-sql-table-change-order-design-insights)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"query\": \"openai-synapse-sql-query-design-review-design-insights\"|\"query\": \"$(openai-synapse-sql-query-design-review-design-insights)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-design-review-design-insights\"|\"name\": \"$(openai-synapse-sql-table-design-review-design-insights)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"query\": \"openai-synapse-sql-query-material-drawing\"|\"query\": \"$(openai-synapse-sql-query-material-drawing)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-material-drawing\"|\"name\": \"$(openai-synapse-sql-table-material-drawing)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"query\": \"openai-synapse-sql-query-wbt-course-description-structured\"|\"query\": \"$(openai-synapse-sql-query-wbt-course-description-structured)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-wbt-course-description-structured\"|\"name\": \"$(openai-synapse-sql-table-wbt-course-description-structured)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json  
+          sed -i "s|\"name\": \"openai-synapse-sql-table-rpt-rng\"|\"name\": \"$(openai-synapse-sql-table-rpt-rng)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-rpt-track\"|\"name\": \"$(openai-synapse-sql-table-rpt-track)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-rpt-wiki\"|\"name\": \"$(openai-synapse-sql-table-rpt-wiki)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"query\": \"openai-synapse-sql-query-design-workspace\"|\"query\": \"$(openai-synapse-sql-query-design-workspace)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-design-workspace\"|\"name\": \"$(openai-synapse-sql-table-design-workspace)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-escalation-solver-view\"|\"name\": \"$(openai-synapse-sql-table-escalation-solver-view)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-escalation-solver-cci-view\"|\"name\": \"$(openai-synapse-sql-table-escalation-solver-cci-view)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-nce-live-view\"|\"name\": \"$(openai-synapse-sql-table-nce-live-view)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          sed -i "s|\"name\": \"openai-synapse-sql-table-intelpassdown-cci-view\"|\"name\": \"$(openai-synapse-sql-table-intelpassdown-cci-view)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+
+          datasourceSynapseJSON=$(cat ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json)
+          echo "Edited skillset json: $datasourceSynapseJSON"
+
+          # Extract the description field from the JSON file
+          description=$(cat "./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json" | jq -r '.description')
+
+          # Check the description and populate data_source_definition.json with storage account connection string
+          if [ "$description" == "CFPA" ]; then
+            echo "Using CFPA connection string"
+            sed -i "s|\"connectionString\": \"connectionString\"|\"connectionString\": \"$(openai-km-acs-cfpa-datasource-connection)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          else
+            echo "Using default connection string"
+            sed -i "s|\"connectionString\": \"connectionString\"|\"connectionString\": \"$(openai-km-acs-datasource-connection)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json
+          fi
+          
+          # Populate index_definition.json and skillset_definition.json with Open AI Resource URI
+          sed -i "s|\"resourceUri\": \"resourceUri\"|\"resourceUri\": \"$(oai-resource-uri)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/index_definition.json
+          sed -i "s|\"resourceUri\": \"resourceUriSkillset\"|\"resourceUri\": \"$(oai-use2-resource-uri)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/skillset_definition.json
+
+          # Populate index_definition.json and skillset_definition.json with Open AI USE API Key
+          sed -i "s|\"apiKey\": \"apiKey\"|\"apiKey\": \"$(openai-use-api-key)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/index_definition.json
+          sed -i "s|\"apiKey\": \"apiKeySkillset\"|\"apiKey\": \"$(openai-use2-api-key)\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/skillset_definition.json
+          
+          # Populate skillset_definition.json with function app URI
+          
+          skillset_desc=$(jq -r '.description' ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/skillset_definition.json)
+          if [ "$skillset_desc" == "RecipeRunnerSkill" ]; then
+              # HIGHLIGHT: Using alternative function name and key for RecipeRunnerSkill
+              functionAppURL="https://$(function-app-name).azurewebsites.net/api/$(recipe-function-name)?code=$(fn-app-reciperunnerskill-key)"
+              echo "Using RecipeRunnerSkill function app URL: $functionAppURL"
+          else
+              functionAppURL="https://$(function-app-name).azurewebsites.net/api/$(function-name)?code=$(fn-app-customsplitskill-key)"
+          fi
+
+          sed -i "s|\"uri\": \"uri\"|\"uri\": \"$functionAppURL\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/skillset_definition.json
+
+          # Populate schedule interval start time in indexer_definition.json
+          # scheduler_date=$(date -u -d "1 day ago" +"%Y-%m-%dT00:30:00Z")
+          # echo $scheduler_date
+          # sed -i "s|\"startTime\": \"startTime\"|\"startTime\": \"$scheduler_date\"|g" ./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/indexer_definition.json
+      
+
+          ##############################################################
+          # Make API calls to create/update all the definitions
+          ##############################################################
+          
+          dataSourceFilePath='./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/data_source_definition.json'
+          curl -X PUT "$searchServiceBaseURL/datasources/$dataSourceName_updated?api-version=$(search-service-restapi-version)" -H "Content-Type: application/json" -H "api-key: ${apiKey}" --data-binary "@$dataSourceFilePath" -o response1.json
+          echo "Data Source response:"
+          cat response1.json
+          
+          indexFilePath='./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/index_definition.json'
+          curl -X PUT "$searchServiceBaseURL/indexes/$indexName_updated?api-version=$(search-service-restapi-version)" -H "Content-Type: application/json" -H "api-key: ${apiKey}" --data-binary "@$indexFilePath" -o response2.json
+          echo "Index response:"
+          cat response2.json
+          
+          skillsetFilePath='./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/skillset_definition.json'
+
+          # Check if the description is "Skip"
+          description=$(cat "$skillsetFilePath" | jq -r '.description')
+          if [ "$description" != "Skip" ]; then
+              # Make API call to create/update skillset definition
+              curl -X PUT "$searchServiceBaseURL/skillsets/$skillsetName_updated?api-version=$(search-service-restapi-version)" -H "Content-Type: application/json" -H "api-key: ${apiKey}" --data-binary "@$skillsetFilePath" -o response4.json
+              echo "Skillset response:"
+              cat response4.json
+          else
+              echo "Skillset description is 'Skip'. Skipping API call for skillset."
+          fi
+
+          indexerFilePath='./src/search_service/usecases/${{ parameters.selectedUsecaseName }}/indexer_definition.json'
+          curl -X PUT "$searchServiceBaseURL/indexers/$indexerName_updated?api-version=$(search-service-restapi-version)" -H "Content-Type: application/json" -H "api-key: ${apiKey}" --data-binary "@$indexerFilePath" -o response3.json
+          echo "Indexer response:"
+          cat response3.json
+
+        displayName: 'Update ACS definitions'

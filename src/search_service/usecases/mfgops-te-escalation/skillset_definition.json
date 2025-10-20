@@ -1,0 +1,31 @@
+{
+  "name": "skillset-oai",
+  "description": "Skillset to chunk documents and generating embeddings",
+  "skills": [
+    {
+      "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+      "name": "#1",
+      "description": "Skill to generate embeddings via Azure OpenAI",
+      "context": "/document",
+      "resourceUri": "resourceUriSkillset",
+      "apiKey": "apiKeySkillset",
+      "deploymentId": "text-embedding-3-small",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/chunk"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "embedding",
+          "targetName": "chunk_vector"
+        }
+      ],
+      "authIdentity": null
+    }
+  ],
+  "cognitiveServices": null,
+  "knowledgeStore": null,
+  "encryptionKey": null
+}

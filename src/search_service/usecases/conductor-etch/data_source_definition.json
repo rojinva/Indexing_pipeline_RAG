@@ -1,0 +1,25 @@
+{
+  "name": "datasource-oai",
+  "description": null,
+  "type": "adlsgen2",
+  "subtype": null,
+  "credentials": {
+    "connectionString": "connectionString"
+  },
+  "container": {
+    "name": "knowledge-mining",
+<<<<<<<< HEAD:src/search_service/usecases/conductor-etch/data_source_definition.json
+    "query": "ConductorEtch"
+========
+    "query": "swcPoc"
+>>>>>>>> dev:src/search_service/usecases/swc-poc/data_source_definition.json
+  },
+  "dataChangeDetectionPolicy": null,
+  "dataDeletionDetectionPolicy": {
+    "@odata.type": "#Microsoft.Azure.Search.SoftDeleteColumnDeletionDetectionPolicy",
+    "softDeleteColumnName": "is_deleted",
+    "softDeleteMarkerValue": "true"
+  },
+  "encryptionKey": null,
+  "identity": null
+}

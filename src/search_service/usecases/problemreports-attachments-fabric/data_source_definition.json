@@ -1,0 +1,19 @@
+{
+  "@odata.context": "https://srch-lam-usw-oai-dev-eng-03.search.windows.net/$metadata#datasources/$entity",
+  "@odata.etag": "\"0x8DD155F055E7729\"",
+  "name": "datasource-oai",
+  "description": null,
+  "type": "onelake",
+  "subtype": null,
+  "credentials": {
+    "connectionString": "ResourceId=8b7f94b9-8ec9-431d-a709-6b8c07317e8f"
+  },
+  "container": {
+    "name": "fa3f4aa4-a74a-4caa-beb3-6f6a7c672a2c",
+    "query": "i2r/pr_attachments"
+  },
+  "dataChangeDetectionPolicy": null,
+  "dataDeletionDetectionPolicy": null,
+  "encryptionKey": null,
+  "identity": null
+}

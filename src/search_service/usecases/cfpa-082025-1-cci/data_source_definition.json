@@ -1,0 +1,20 @@
+{
+  "name": "datasource-oai",
+  "description": "CFPA",
+  "type": "adlsgen2",
+  "subtype": null,
+  "credentials": {
+    "connectionString": "connectionString"
+  },
+  "container": {
+    "name": "corpfpa"
+  },
+  "dataChangeDetectionPolicy": null,
+  "dataDeletionDetectionPolicy": {
+    "@odata.type": "#Microsoft.Azure.Search.SoftDeleteColumnDeletionDetectionPolicy",
+    "softDeleteColumnName": "is_deleted",
+    "softDeleteMarkerValue": "true"
+  },
+  "encryptionKey": null,
+  "identity": null
+}

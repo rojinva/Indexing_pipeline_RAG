@@ -1,0 +1,21 @@
+{
+  "@odata.context": "https://srch-lam-usw-oai-dev-eng-03.search.windows.net/$metadata#indexers/$entity",
+  "@odata.etag": "\"0x8DDB5866D24F1E7\"",
+  "name": "dfabric-synapse-endpoint-indexer",
+  "description": "",
+  "dataSourceName": "dfabric-synapse-endpoint-datasource",
+  "skillsetName": null,
+  "targetIndexName": "dfabric-synapse-endpoint-index",
+  "disabled": null,
+  "schedule": null,
+  "parameters": {
+    "batchSize": null,
+    "maxFailedItems": 0,
+    "maxFailedItemsPerBatch": 0,
+    "configuration": {}
+  },
+  "fieldMappings": [],
+  "outputFieldMappings": [],
+  "cache": null,
+  "encryptionKey": null
+}

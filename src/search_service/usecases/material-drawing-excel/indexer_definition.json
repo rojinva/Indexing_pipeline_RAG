@@ -1,0 +1,33 @@
+{
+  "name": "indexer-oai",
+  "description": "Indexer to index documents",
+  "dataSourceName": "datasource-oai",
+  "skillsetName": "skillset-oai",
+  "targetIndexName": "index-oai",
+  "disabled": false,
+  "schedule": {},
+  "parameters": {
+    "batchSize": null,
+    "maxFailedItems": -1,
+    "maxFailedItemsPerBatch": -1,
+    "base64EncodeKeys": null,
+    "configuration": {
+      "parsingMode": "default",
+      "excludedFileNameExtensions": "",
+      "indexedFileNameExtensions": "",
+      "failOnUnsupportedContentType": false,
+      "failOnUnprocessableDocument": false,
+      "indexStorageMetadataOnlyForOversizedDocuments": false,
+      "firstLineContainsHeaders": true,
+      "dataToExtract": "contentAndMetadata",
+      "imageAction": "none",
+      "allowSkillsetToReadFileData": false,
+      "pdfTextRotationAlgorithm": "none",
+      "executionEnvironment": "private"
+    }
+  },
+  "fieldMappings": [],
+  "outputFieldMappings": [],
+  "cache": null,
+  "encryptionKey": null
+}

@@ -1,0 +1,18 @@
+{
+  "name": "indexer-oai",
+  "description": "Indexer to index problem report rows",
+  "dataSourceName": "datasource-oai",
+  "targetIndexName": "index-oai",
+  "disabled": null,
+  "schedule": null,
+  "parameters": {
+    "batchSize": null,
+    "maxFailedItems": -1,
+    "maxFailedItemsPerBatch": -1,
+    "configuration": {}
+  },
+  "fieldMappings": [],
+  "outputFieldMappings": [],
+  "cache": null,
+  "encryptionKey": null
+}

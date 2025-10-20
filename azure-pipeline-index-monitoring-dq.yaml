@@ -1,0 +1,98 @@
+trigger: none
+#  branches:
+#    include:
+#      - dev
+
+schedules:
+  - cron: "0 */3 * * *"
+    displayName: "Script will runs every 3 hrs"
+    branches:
+      include:
+        - dev
+    always: true
+
+pool:
+  name: DSML-pool
+
+stages:
+- stage: DevEnvironment
+  jobs:
+  - job: IndexingOnDevEnvironment
+    steps:
+    - script: |
+        dos2unix src/index_monitor/update_dev_config_ini.sh
+      displayName: 'Convert line endings to Unix format'
+    
+    - script: |
+        chmod 755 src/index_monitor/update_dev_config_ini.sh  # Make sure the script is executable
+      displayName: 'Providing executable permissions to the script'  
+    
+    - task: AzureCLI@2
+      displayName: 'Update KV secrets in config.ini file'
+      inputs:
+        azureSubscription: 'lam-devops-dshub-dev-conn'
+        scriptType: 'bash'
+        scriptLocation: 'scriptPath'
+        scriptPath: 'src/index_monitor/update_dev_config_ini.sh'
+      
+    - script: |
+        source /home/svc_ado/pyindexmenv/bin/activate  # Activate the virtual environment
+        cd src/index_monitor/
+        python app.py dev # Run app.py python script
+      displayName: 'Run Python App in Virtual Environment'   
+
+- stage: QaEnvironment
+  dependsOn: 
+    - DevEnvironment
+  jobs:
+  - job: IndexingOnQaEnvironment
+    steps:
+    - script: |
+        dos2unix src/index_monitor/update_qa_config_ini.sh
+      displayName: 'Convert line endings to Unix format'
+    
+    - script: |
+        chmod 755 src/index_monitor/update_qa_config_ini.sh  # Make sure the script is executable
+      displayName: 'Providing executable permissions to the script'  
+    
+    - task: AzureCLI@2
+      displayName: 'Update KV secrets in config.ini file'
+      inputs:
+        azureSubscription: 'lam-devops-dshub-qa-conn'
+        scriptType: 'bash'
+        scriptLocation: 'scriptPath'
+        scriptPath: 'src/index_monitor/update_qa_config_ini.sh'
+      
+    - script: |
+        source /home/svc_ado/pyindexmenv/bin/activate  # Activate the virtual environment
+        cd src/index_monitor/
+        python app.py qa # Run app.py python script
+      displayName: 'Run Python App in Virtual Environment'
+ 
+- stage: PrdEnvironment
+  dependsOn: 
+    - QaEnvironment
+  jobs:
+  - job: IndexingOnPrdEnvironment
+    steps:
+    - script: |
+        dos2unix src/index_monitor/update_prd_config_ini.sh
+      displayName: 'Convert line endings to Unix format'
+    
+    - script: |
+        chmod 755 src/index_monitor/update_prd_config_ini.sh  # Make sure the script is executable
+      displayName: 'Providing executable permissions to the script'  
+    
+    - task: AzureCLI@2
+      displayName: 'Update KV secrets in config.ini file'
+      inputs:
+        azureSubscription: 'lam-devops-dshub-prd-conn'
+        scriptType: 'bash'
+        scriptLocation: 'scriptPath'
+        scriptPath: 'src/index_monitor/update_prd_config_ini.sh'
+      
+    - script: |
+        source /home/svc_ado/pyindexmenv/bin/activate  # Activate the virtual environment
+        cd src/index_monitor/
+        python app.py prd # Run app.py python script
+      displayName: 'Run Python App in Virtual Environment' 

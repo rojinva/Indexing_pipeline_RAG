@@ -1,0 +1,19 @@
+{
+  "name": "datasource-oai",
+  "description": null,
+  "type": "azuresql",
+  "subtype": "sqliaas",
+  "credentials": {
+    "connectionString": "openai-fabric-sql-connectionstring"
+  },
+  "container": {
+    "name": "[eng].[vw_problem_report_index]"
+  },
+  "dataChangeDetectionPolicy": {
+    "@odata.type": "#Microsoft.Azure.Search.HighWaterMarkChangeDetectionPolicy",
+    "highWaterMarkColumnName": "change_tracking_column"
+  },
+  "dataDeletionDetectionPolicy": null,
+  "encryptionKey": null,
+  "identity": null
+}

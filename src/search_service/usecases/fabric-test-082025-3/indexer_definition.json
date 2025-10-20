@@ -1,0 +1,18 @@
+{
+  "name": "indexer-oai",
+  "description": "",
+  "dataSourceName": "datasource-oai",
+  "targetIndexName": "index-oai",
+  "disabled": null,
+  "schedule": null,
+  "parameters": {
+    "batchSize": null,
+    "maxFailedItems": 0,
+    "maxFailedItemsPerBatch": 0,
+    "configuration": {}
+  },
+  "fieldMappings": [],
+  "outputFieldMappings": [],
+  "cache": null,
+  "encryptionKey": null
+}

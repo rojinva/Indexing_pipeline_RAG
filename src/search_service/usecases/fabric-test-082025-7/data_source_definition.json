@@ -1,0 +1,15 @@
+{
+  "name": "datasource-oai",
+  "description": null,
+  "type": "azuresql",
+  "subtype": "sqliaas",
+  "credentials": {
+    "connectionString": "openai-fabric-sql-connectionstring"
+  },
+  "container": {
+    "name": "[eng].[IPLM_PROBLEM_REPORT_TBL]"},
+  "dataChangeDetectionPolicy": null,
+  "dataDeletionDetectionPolicy": null,
+  "encryptionKey": null,
+  "identity": null
+}

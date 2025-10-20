@@ -1,0 +1,16 @@
+{
+  "name": "datasource-oai",
+  "description": null,
+  "type": "azuresql",
+  "subtype": "sqliaas",
+  "credentials": {
+    "connectionString": "openai-fabric-sql-connectionstring"
+  },
+  "container": {
+    "name": "[eng].[problem_report]"
+  },
+  "dataChangeDetectionPolicy": null,
+  "dataDeletionDetectionPolicy": null,
+  "encryptionKey": null,
+  "identity": null
+}

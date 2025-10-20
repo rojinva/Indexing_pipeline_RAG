@@ -1,0 +1,17 @@
+{
+  "name": "datasource-oai",
+  "description": null,
+  "type": "adlsgen2",
+  "subtype": null,
+  "credentials": {
+    "connectionString": "connectionString"
+  },
+  "container": {
+    "name": "knowledge-mining",
+    "query": "P2F/output"
+  },
+  "dataChangeDetectionPolicy": null,
+  "dataDeletionDetectionPolicy": null,
+  "encryptionKey": null,
+  "identity": null
+}

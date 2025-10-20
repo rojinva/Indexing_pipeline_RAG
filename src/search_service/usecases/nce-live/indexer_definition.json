@@ -1,0 +1,26 @@
+{
+  "name": "indexer-oai",
+  "description": "Indexer to index iqms nce live",
+  "dataSourceName": "datasource-oai",
+  "skillsetName": "skillset-oai",
+  "targetIndexName": "index-oai",
+  "disabled": null,
+  "schedule": null,
+  "parameters": {
+    "batchSize": null,
+    "maxFailedItems": -1,
+    "maxFailedItemsPerBatch": -1,
+    "base64EncodeKeys": null,
+    "configuration": {
+      "executionEnvironment": "private"}
+  },
+  "fieldMappings": [],
+  "outputFieldMappings": [
+  {
+    "sourceFieldName": "/document/chunk_vector",
+    "targetFieldName": "chunk_vector"
+  }
+],
+  "cache": null,
+  "encryptionKey": null
+}

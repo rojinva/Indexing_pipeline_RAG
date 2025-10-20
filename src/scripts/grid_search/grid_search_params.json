@@ -1,0 +1,11 @@
+[
+    {"semantic_vector_search_k5": {"queryType": "semantic", "semanticConfiguration": "oai-semantic-config", "vectorQueries": [{"kind": "text", "text": "query", "k": 5, "fields": "chunk_vector"}]}},
+    {"semantic_vector_search_k50": {"queryType": "semantic", "semanticConfiguration": "oai-semantic-config", "vectorQueries": [{"kind": "text", "text": "query", "k": 50, "fields": "chunk_vector"}]}},
+    {"full_vector_search_k50": {"queryType": "full", "vectorQueries": [{"kind": "text", "text": "query", "k": 50, "fields": "chunk_vector"}]}},
+    {"full_text_search": {"search": "query", "queryType": "full"}},
+    {"semantic_text_search": {"search": "query", "queryType": "semantic", "semanticConfiguration": "oai-semantic-config"}},
+    {"semantic_hybrid_search_k5": {"search": "query", "queryType": "semantic", "semanticConfiguration": "oai-semantic-config", "vectorQueries": [{"kind": "text", "text": "query", "k": 5, "fields": "chunk_vector"}]}},
+    {"semantic_hybrid_search_k50": {"search": "query", "queryType": "semantic", "semanticConfiguration": "oai-semantic-config", "vectorQueries": [{"kind": "text", "text": "query", "k": 50, "fields": "chunk_vector"}]}},
+    {"full_hybrid_search_k5": {"search": "query", "queryType": "full", "vectorQueries": [{"kind": "text", "text": "query", "k": 5, "fields": "chunk_vector"}]}},
+    {"full_hybrid_search_k50": {"search": "query", "queryType": "full", "vectorQueries": [{"kind": "text", "text": "query", "k": 50, "fields": "chunk_vector"}]}}
+]

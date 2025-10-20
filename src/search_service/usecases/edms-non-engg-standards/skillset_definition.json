@@ -1,0 +1,332 @@
+{
+  "name": "skillset-oai",
+  "description": "Skillset to chunk documents and generating embeddings",
+  "skills": [
+    {
+      "@odata.type": "#Microsoft.Skills.Custom.WebApiSkill",
+      "name": "custom_split_skill",
+      "description": "Split skill to chunk documents",
+      "context": "/document",
+      "uri": "uri",
+      "httpMethod": "POST",
+      "timeout": "PT230S",
+      "batchSize": 2,
+      "degreeOfParallelism": 1,
+      "inputs": [
+        {
+          "name": "content",
+          "source": "/document/content"
+        },
+        {
+          "name": "parent_filename",
+          "source": "/document/metadata_storage_name"
+        },
+        {
+          "name": "blob_uri",
+          "source": "/document/metadata_storage_path"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "chunks",
+          "targetName": "chunks"
+        }
+      ],
+      "httpHeaders": {
+        "size": "7000",
+        "overlap": "1000"
+      }
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+      "name": "#2",
+      "description": "Skill to generate embeddings via Azure OpenAI",
+      "context": "/document/chunks/*",
+      "resourceUri": "resourceUriSkillset",
+      "apiKey": "apiKeySkillset",
+      "deploymentId": "text-embedding-3-small",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/chunks/*/content"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "embedding",
+          "targetName": "chunk_vector"
+        }
+      ],
+      "authIdentity": null
+    }
+  ],
+  "cognitiveServices": null,
+  "knowledgeStore": null,
+  "indexProjections": {
+    "selectors": [
+      {
+        "targetIndexName": "index-oai",
+        "parentKeyFieldName": "parent_id",
+        "sourceContext": "/document/chunks/*",
+        "mappings": [
+          {
+            "name": "chunk",
+            "source": "/document/chunks/*/content",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "chunk_hash",
+            "source": "/document/chunks/*/chunk_hash",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "sheet_name",
+            "source": "/document/chunks/*/sheet_name",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "row",
+            "source": "/document/chunks/*/row",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "use_case",
+            "source": "/document/chunks/*/use_case",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "parent_path",
+            "source": "/document/chunks/*/parent_path",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "chunk_vector",
+            "source": "/document/chunks/*/chunk_vector",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "parent_filename",
+            "source": "/document/document_name",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "storage_modified",
+            "source": "/document/metadata_storage_last_modified",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "source_modified",
+            "source": "/document/source_file_modified",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "source_created",
+            "source": "/document/source_file_created",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "uuid",
+            "source": "/document/uuid",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "parent_url",
+            "source": "/document/parent_url",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "document_number",
+            "source": "/document/document_number",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "document_name",
+            "source": "/document/document_name",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "content_type",
+            "source": "/document/content_type",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "functional_group",
+            "source": "/document/functional_group",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "document_name_with_link",
+            "source": "/document/document_name_with_link",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "id",
+            "source": "/document/id",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "document_id",
+            "source": "/document/document_id",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "process_owner",
+            "source": "/document/process_owner",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "acknowledgedby",
+            "source": "/document/acknowledgedby",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "authorizedby",
+            "source": "/document/authorizedby",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "next_review_date",
+            "source": "/document/next_review_date",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "modified_by",
+            "source": "/document/modified_by",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "sensitivity",
+            "source": "/document/sensitivity",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "document_published_date",
+            "source": "/document/document_published_date",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "title",
+            "source": "/document/title",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "enterprise_keywords",
+            "source": "/document/enterprise_keywords",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "revision_number",
+            "source": "/document/revision_number",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "prefix",
+            "source": "/document/prefix",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "reference_documents",
+            "source": "/document/reference_documents",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "document_purpose",
+            "source": "/document/document_purpose",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "scope",
+            "source": "/document/scope",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "departments_affected",
+            "source": "/document/departments_affected",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "discipline",
+            "source": "/document/discipline",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "topic",
+            "source": "/document/topic",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "approval_status",
+            "source": "/document/approval_status",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "products",
+            "source": "/document/products",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "related_documents",
+            "source": "/document/related_documents",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "language",
+            "source": "/document/language",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "sitelocation",
+            "source": "/document/sitelocation",
+            "sourceContext": null,
+            "inputs": []
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "projectionMode": "skipIndexingParentDocuments"
+    }
+  },
+  "encryptionKey": null
+}

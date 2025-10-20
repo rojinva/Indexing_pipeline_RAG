@@ -1,0 +1,21 @@
+{
+  "name": "datasource-oai",
+  "description": null,
+  "type": "adlsgen2",
+  "subtype": null,
+  "credentials": {
+    "connectionString": "connectionString"
+  },
+  "container": {
+    "name": "knowledge-mining",
+    "query": "sabre3d_epl"
+  },
+  "dataChangeDetectionPolicy": null,
+  "dataDeletionDetectionPolicy": {
+    "@odata.type": "#Microsoft.Azure.Search.SoftDeleteColumnDeletionDetectionPolicy",
+    "softDeleteColumnName": "is_deleted",
+    "softDeleteMarkerValue": "true"
+  },
+  "encryptionKey": null,
+  "identity": null
+}

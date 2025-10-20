@@ -1,0 +1,29 @@
+{
+  "name": "indexer-oai",
+  "description": "Indexer to index nce rows",
+  "dataSourceName": "datasource-oai",
+  "skillsetName": "skillset-oai",
+  "targetIndexName": "index-oai",
+  "disabled": null,
+  "schedule": {
+    "interval": "PT12H",
+    "startTime": "2025-01-01T00:00:00Z"
+  },
+  "parameters": {
+    "batchSize": null,
+    "maxFailedItems": -1,
+    "maxFailedItemsPerBatch": -1,
+    "base64EncodeKeys": null,
+    "configuration": {
+      "executionEnvironment": "private"}
+  },
+  "fieldMappings": [],
+  "outputFieldMappings": [
+  {
+    "sourceFieldName": "/document/chunk_vector",
+    "targetFieldName": "chunk_vector"
+  }
+],
+  "cache": null,
+  "encryptionKey": null
+}

@@ -1,0 +1,221 @@
+{
+  "name": "index-oai",
+  "defaultScoringProfile": null,
+  "fields": [
+  {
+    "name": "chunk",
+    "type": "Edm.String",
+    "searchable": true,
+    "filterable": true,
+    "retrievable": true,
+    "stored": true,
+    "sortable": true,
+    "facetable": true
+  },
+  {
+    "name": "chunk_id",
+    "type": "Edm.String",
+    "searchable": true,
+    "filterable": true,
+    "retrievable": true,
+    "stored": true,
+    "sortable": true,
+    "facetable": true,
+    "key": true,
+    "indexAnalyzer": null,
+    "searchAnalyzer": null,
+    "analyzer": "keyword",
+    "normalizer": null,
+    "dimensions": null,
+    "vectorSearchProfile": null,
+    "synonymMaps": []
+  },
+  {
+    "name": "parent_filename",
+    "type": "Edm.String",
+    "searchable": true,
+    "filterable": true,
+    "retrievable": true,
+    "stored": true,
+    "sortable": true,
+    "facetable": true
+  },
+  {
+    "name": "Owners",
+    "type": "Edm.String",
+    "searchable": true,
+    "filterable": true,
+    "retrievable": true,
+    "stored": true,
+    "sortable": false,
+    "facetable": false,
+    "key": false,
+    "indexAnalyzer": null,
+    "searchAnalyzer": null,
+    "analyzer": null,
+    "normalizer": null,
+    "dimensions": null,
+    "vectorSearchProfile": null,
+    "synonymMaps": []
+  },
+  {
+    "name": "Training_Object_ID",
+    "type": "Edm.String",
+    "searchable": false,
+    "filterable": true,
+    "retrievable": true,
+    "stored": true,
+    "sortable": false,
+    "facetable": false,
+    "key": false,
+    "indexAnalyzer": null,
+    "searchAnalyzer": null,
+    "analyzer": null,
+    "normalizer": null,
+    "dimensions": null,
+    "vectorSearchProfile": null,
+    "synonymMaps": []
+  },
+  {
+    "name": "change_tracking_column",
+    "type": "Edm.String",
+    "searchable": true,
+    "filterable": true,
+    "retrievable": true,
+    "stored": true,
+    "sortable": true,
+    "facetable": true,
+    "key": false,
+    "indexAnalyzer": null,
+    "searchAnalyzer": null,
+    "analyzer": null,
+    "normalizer": null,
+    "dimensions": null,
+    "vectorSearchProfile": null,
+    "synonymMaps": []
+  },
+  {
+    "name": "parent_url",
+    "type": "Edm.String",
+    "searchable": true,
+    "filterable": true,
+    "retrievable": true,
+    "stored": true,
+    "sortable": true,
+    "facetable": true,
+    "key": false,
+    "indexAnalyzer": null,
+    "searchAnalyzer": null,
+    "analyzer": null,
+    "normalizer": null,
+    "dimensions": null,
+    "vectorSearchProfile": null,
+    "synonymMaps": []
+  },
+  {
+    "name": "Training_ID",
+    "type": "Edm.String",
+    "searchable": true,
+    "filterable": true,
+    "retrievable": true,
+    "stored": true,
+    "sortable": true,
+    "facetable": true,
+    "key": false,
+    "indexAnalyzer": null,
+    "searchAnalyzer": null,
+    "analyzer": null,
+    "normalizer": null,
+    "dimensions": null,
+    "vectorSearchProfile": null,
+    "synonymMaps": []
+ },
+ {
+    "name": "Target_Audience",
+    "type": "Edm.String",
+    "searchable": true,
+    "filterable": true,
+    "retrievable": true,
+    "stored": true,
+    "sortable": true,
+    "facetable": true,
+    "key": false,
+    "indexAnalyzer": null,
+    "searchAnalyzer": null,
+    "analyzer": null,
+    "normalizer": null,
+    "dimensions": null,
+    "vectorSearchProfile": null,
+    "synonymMaps": []
+ },
+ {
+    "name": "Training_Provider",
+    "type": "Edm.String",
+    "searchable": true,
+    "filterable": true,
+    "retrievable": true,
+    "stored": true,
+    "sortable": true,
+    "facetable": true,
+    "key": false,
+    "indexAnalyzer": null,
+    "searchAnalyzer": null,
+    "analyzer": null,
+    "normalizer": null,
+    "dimensions": null,
+    "vectorSearchProfile": null,
+    "synonymMaps": []
+ },
+ {
+    "name": "Training_Subject",
+    "type": "Edm.String",
+    "searchable": true,
+    "filterable": true,
+    "retrievable": true,
+    "stored": true,
+    "sortable": true,
+    "facetable": true,
+    "key": false,
+    "indexAnalyzer": null,
+    "searchAnalyzer": null,
+    "analyzer": null,
+    "normalizer": null,
+    "dimensions": null,
+    "vectorSearchProfile": null,
+    "synonymMaps": []
+ }
+],
+  "scoringProfiles": [],
+  "suggesters": [],
+  "analyzers": [],
+  "normalizers": [],
+  "tokenizers": [],
+  "tokenFilters": [],
+  "charFilters": [],
+    "similarity": {
+    "@odata.type": "#Microsoft.Azure.Search.BM25Similarity"
+  },
+  "semantic": {
+    "defaultConfiguration": null,
+    "configurations": [
+      {
+        "name": "oai-semantic-config",
+        "prioritizedFields": {
+          "titleField": {
+            "fieldName": "chunk"
+          },
+          "prioritizedContentFields": [
+            {
+              "fieldName": "chunk"
+            }
+          ],
+          "prioritizedKeywordsFields": [
+            {
+              "fieldName": "parent_filename"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

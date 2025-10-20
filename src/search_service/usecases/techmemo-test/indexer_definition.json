@@ -1,0 +1,74 @@
+<<<<<<<< HEAD:src/search_service/usecases/techmemo-test/indexer_definition.json
+{
+  "name": "indexer-oai",
+  "description": "Indexer to index documents",
+  "dataSourceName": "datasource-oai",
+  "skillsetName": "skillset-oai",
+  "targetIndexName": "index-oai",
+  "disabled": false,
+  "schedule": {
+    "interval": "PT3H",
+    "startTime": "2024-01-01T00:00:00Z"
+  },
+  "parameters": {
+    "batchSize": null,
+    "maxFailedItems": -1,
+    "maxFailedItemsPerBatch": -1,
+    "base64EncodeKeys": null,
+    "configuration": {
+      "parsingMode": "default",
+      "excludedFileNameExtensions": "",
+      "indexedFileNameExtensions": "",
+      "failOnUnsupportedContentType": false,
+      "failOnUnprocessableDocument": false,
+      "indexStorageMetadataOnlyForOversizedDocuments": false,
+      "firstLineContainsHeaders": true,
+      "dataToExtract": "contentAndMetadata",
+      "imageAction": "none",
+      "allowSkillsetToReadFileData": false,
+      "pdfTextRotationAlgorithm": "none",
+      "executionEnvironment": "private"
+    }
+  },
+  "fieldMappings": [],
+  "outputFieldMappings": [],
+  "cache": null,
+  "encryptionKey": null
+========
+{
+  "name": "indexer-oai",
+  "description": "Indexer to index documents",
+  "dataSourceName": "datasource-oai",
+  "skillsetName": "skillset-oai",
+  "targetIndexName": "index-oai",
+  "disabled": false,
+  "schedule": {
+    "interval": "PT3H",
+    "startTime": "2024-01-01T00:00:00Z"
+  },
+  "parameters": {
+    "batchSize": null,
+    "maxFailedItems": -1,
+    "maxFailedItemsPerBatch": -1,
+    "base64EncodeKeys": null,
+    "configuration": {
+      "parsingMode": "default",
+      "excludedFileNameExtensions": "",
+      "indexedFileNameExtensions": "",
+      "failOnUnsupportedContentType": false,
+      "failOnUnprocessableDocument": false,
+      "indexStorageMetadataOnlyForOversizedDocuments": false,
+      "firstLineContainsHeaders": true,
+      "dataToExtract": "contentAndMetadata",
+      "imageAction": "none",
+      "allowSkillsetToReadFileData": false,
+      "pdfTextRotationAlgorithm": "none",
+      "executionEnvironment": "private"
+    }
+  },
+  "fieldMappings": [],
+  "outputFieldMappings": [],
+  "cache": null,
+  "encryptionKey": null
+>>>>>>>> dev:src/search_service/usecases/wafer/indexer_definition.json
+}

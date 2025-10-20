@@ -1,0 +1,36 @@
+{
+  "name": "indexer-oai",
+  "description": "Indexer to index index-oai-failure-analysis-with-attachments",
+  "dataSourceName": "datasource-oai",
+  "skillsetName": "skillset-oai",
+  "targetIndexName": "index-oai",
+  "disabled": false,
+  "schedule": {
+    "interval": "PT24H",
+    "startTime": "2025-09-24T03:30:00Z"
+  },
+  "parameters": {
+    "batchSize": null,
+    "maxFailedItems": -1,
+    "maxFailedItemsPerBatch": -1,
+    "base64EncodeKeys": null,
+    "configuration": {
+      "parsingMode": "default",
+      "excludedFileNameExtensions": ".7z, .bmp, .evtx, .gif, .ht, .jpeg, .jpg, .lnk, .mov, .mp4, .odp, .ods, .png, .potx, .rar, .snag, .tif, .vsdx, .zip",
+      "indexedFileNameExtensions": "",
+      "failOnUnsupportedContentType": false,
+      "failOnUnprocessableDocument": false,
+      "indexStorageMetadataOnlyForOversizedDocuments": false,
+      "firstLineContainsHeaders": true,
+      "dataToExtract": "contentAndMetadata",
+      "imageAction": "none",
+      "allowSkillsetToReadFileData": false,
+      "pdfTextRotationAlgorithm": "none",
+      "executionEnvironment": "private"
+    }
+  },
+  "fieldMappings": [],
+  "outputFieldMappings": [],
+  "cache": null,
+  "encryptionKey": null
+}

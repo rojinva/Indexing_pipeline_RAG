@@ -1,0 +1,17 @@
+{
+  "name": "datasource-oai",
+  "description": null,
+  "type": "azuresql",
+  "subtype": "sqliaas",
+  "credentials": {
+    "connectionString": "openai-fabric-sql-connectionstring"
+  },
+  "container": {
+    "name": "[eng].[IPLM_PROBLEM_REPORT_TBL]",
+    "query": "SELECT NAME as parent_filename, 'https://lambots.lamrc.net/lambots/enterprise-lambot' as parent_url, STATE as STATE, PRIORITY as PRIORITY, CONCAT('PR NUMBER: ', NAME, '; PROBLEM: ', PROBLEM_DESCRIPTION, '; REASON: ', REASON, '; SUGGESTED_SOLUTION: ', SUGGESTED_SOLUTION) as chunk, NAME as chunk_id FROM eng.IPLM_PROBLEM_REPORT_TBL;"
+  },
+  "dataChangeDetectionPolicy": null,
+  "dataDeletionDetectionPolicy": null,
+  "encryptionKey": null,
+  "identity": null
+}

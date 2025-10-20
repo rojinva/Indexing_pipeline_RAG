@@ -1,0 +1,17 @@
+{
+  "name": "datasource-oai",
+  "description": null,
+  "type": "onelake",
+  "subtype": null,
+  "credentials": {
+    "connectionString": "ResourceId=8b7f94b9-8ec9-431d-a709-6b8c07317e8f"
+  },
+  "container": {
+    "name": "fa3f4aa4-a74a-4caa-beb3-6f6a7c672a2c",
+    "query": "SELECT TOP 100000 DISTINCT p.page_title as parent_filename, r.rev_text_id as chunk_id, CAST(t.old_text AS VARCHAR(MAX)) as chunk FROM eng.nw_page AS p JOIN eng.nw_revision AS r ON r.rev_page = p.page_id JOIN eng.nw_text AS t ON r.rev_text_id = t.old_id"
+  },
+  "dataChangeDetectionPolicy": null,
+  "dataDeletionDetectionPolicy": null,
+  "encryptionKey": null,
+  "identity": null
+}

@@ -1,0 +1,183 @@
+{
+  "name": "skillset-oai",
+  "description": "RecipeRunnerSkill",
+  "skills": [
+    {
+      "@odata.type": "#Microsoft.Skills.Custom.WebApiSkill",
+      "name": "custom_split_skill",
+      "description": "Split skill to chunk documents",
+      "context": "/document",
+      "uri": "uri",
+      "httpMethod": "POST",
+      "timeout": "PT3M",
+      "batchSize": 1,
+      "degreeOfParallelism": 1,
+      "inputs": [
+        {
+          "name": "parent_filename",
+          "source": "/document/metadata_storage_name"
+        },
+        {
+          "name": "blob_uri",
+          "source": "/document/metadata_storage_path"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "chunks",
+          "targetName": "chunks"
+        }
+      ],
+      "httpHeaders": {
+        "Recipe-Id": "recipe_006"
+      }
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+      "name": "#2",
+      "description": "Skill to generate embeddings via Azure OpenAI",
+      "context": "/document/chunks/*",
+      "resourceUri": "resourceUriSkillset",
+      "apiKey": "apiKeySkillset",
+      "deploymentId": "text-embedding-3-small",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/chunks/*/content"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "embedding",
+          "targetName": "chunk_vector"
+        }
+      ],
+      "authIdentity": null
+    }
+  ],
+  "cognitiveServices": null,
+  "knowledgeStore": null,
+  "indexProjections": {
+    "selectors": [
+      {
+        "targetIndexName": "index-oai",
+        "parentKeyFieldName": "parent_id",
+        "sourceContext": "/document/chunks/*",
+        "mappings": [
+          {
+            "name": "chunk",
+            "source": "/document/chunks/*/content",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "chunk_hash",
+            "source": "/document/chunks/*/chunk_hash",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "title",
+            "source": "/document/chunks/*/title",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "contributing_authors",
+            "source": "/document/chunks/*/contributing_authors",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "publication_date",
+            "source": "/document/chunks/*/publication_date",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "company_name",
+            "source": "/document/chunks/*/company_name",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "chunk_num",
+            "source": "/document/chunks/*/chunk_num",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "sheet_name",
+            "source": "/document/chunks/*/sheet_name",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "row",
+            "source": "/document/chunks/*/row",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "use_case",
+            "source": "/document/chunks/*/use_case",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "parent_path",
+            "source": "/document/chunks/*/parent_path",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "chunk_vector",
+            "source": "/document/chunks/*/chunk_vector",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "parent_filename",
+            "source": "/document/metadata_storage_name",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "storage_modified",
+            "source": "/document/metadata_storage_last_modified",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "source_modified",
+            "source": "/document/source_file_modified",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "source_created",
+            "source": "/document/source_file_created",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "uuid",
+            "source": "/document/uuid",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "parent_url",
+            "source": "/document/parent_url",
+            "sourceContext": null,
+            "inputs": []
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "projectionMode": "skipIndexingParentDocuments"
+    }
+  },
+  "encryptionKey": null
+}

@@ -1,0 +1,51 @@
+# This client yaml pipeline calls the sonarqube and blackduck scan templates located in the GIS_LAM_DevOps project 
+
+# Pass both sonar and blackduck properties specific to your project as parameters to the template
+
+trigger:
+  branches:
+    include:
+      - master
+
+variables:
+- name: JAVA_HOME
+  value: '/usr/lib/jvm/java-17' 
+- group: Security-Scan-Variable
+
+resources:
+  repositories:
+  - repository: silkCentralDevOpsRepository
+    type: git
+    name: GIS_Lam_DevOps/SLT_DevOps_Utils
+
+pool:
+  name: DSML-pool
+  demands: java
+
+stages:
+- template: Security-Scan-Template/V1/sonarqube-scan-validation.yml@silkCentralDevOpsRepository
+  parameters:
+           # Path custom Java 17 is installed on the agent
+    JAVA_HOME: '/usr/lib/jvm/java-17'  
+           # Path sonar cert
+    NODE_EXTRA_CA_CERTS: '/home/svc_ado/adoagent/sonarRootFirst.crt'  
+           # SonarQube service connection
+    SonarQube_Service_Connection: 'lam-devops-dshub-SonarQube-conn'
+           # The name of the project in SonarQube. This is how the project will be displayed in the SonarQube UI.
+    SonarQube_ProjectName: 'ent-openai-search-index' 
+           # The unique key for the project in SonarQube. This should be unique for each project.
+    SonarQube_ProjectKey: 'DS_Hub_ent-openai-search-index_926ae6de-bd86-48da-a94e-8c18732be745' 
+           # The path to the xUnit-style test report for Python unit tests. This is used to import test results into SonarQube.
+    pythonXunitReportPath: '$(Build.SourcesDirectory)/test-reports/xunit-result.xml'
+           # The path to the coverage report for Python code. This is used to import code coverage data into SonarQube.
+    pythonCoverageReportPaths: '$(Build.SourcesDirectory)/coverage/coverage.xml'
+
+- template: Security-Scan-Template/V1/blackduck-scan-validation.yml@silkCentralDevOpsRepository
+  parameters:
+    BlackDuckServiceConnection: 'BlackDuck-Production'
+    Blackduck_ProjectName: GIS_SILK_ent-openai-search-index
+    pipPath: '/bin/pip3'
+    pythonPath: '/usr/bin/python3'
+    projectVersionName: '$(Build.SourceBranchName)'
+    pythonProject: 'true'
+    pathToRequirement_txtFile: '/requirements.txt'

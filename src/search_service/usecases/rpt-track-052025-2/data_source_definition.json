@@ -1,0 +1,20 @@
+{
+  "name": "datasource-oai",
+  "description": null,
+  "type": "azuresql",
+  "subtype": null,
+  "credentials": {
+    "connectionString": "openai-synapse-connectionstring"
+  },
+  "container": {
+    "name": "openai-synapse-sql-table-rpt-track", 
+    "query": null
+  },
+  "dataChangeDetectionPolicy": {
+    "@odata.type": "#Microsoft.Azure.Search.HighWaterMarkChangeDetectionPolicy",
+    "highWaterMarkColumnName": "change_tracking_column"
+  },
+  "dataDeletionDetectionPolicy": null,
+  "encryptionKey": null,
+  "identity": null
+}

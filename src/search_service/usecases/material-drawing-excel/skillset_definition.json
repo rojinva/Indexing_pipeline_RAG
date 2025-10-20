@@ -1,0 +1,128 @@
+{ 
+  "name": "skillset-oai", 
+  "description": "Skillset to chunk documents and generating embeddings",
+  "skills": [
+    {
+      "@odata.type": "#Microsoft.Skills.Custom.WebApiSkill",
+      "name": "custom_split_skill",
+      "description": "Split skill to chunk documents",
+      "context": "/document",
+      "uri": "uri",
+      "httpMethod": "POST",
+      "timeout": "PT230S",
+      "batchSize": 1,
+      "degreeOfParallelism": 5,
+      "inputs": [
+        { 
+          "name": "content",
+          "source": "/document/content"
+        },
+        {
+          "name": "parent_filename",
+          "source": "/document/metadata_storage_name"
+        },
+        {
+          "name": "blob_uri",
+          "source": "/document/metadata_storage_path"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "chunks",
+          "targetName": "chunks"
+        }
+      ],
+      "httpHeaders": {
+        "size": "1200",
+        "overlap": "200"
+      }
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+      "name": "#2",
+      "description": "Skill to generate embeddings via Azure OpenAI",
+      "context": "/document/chunks/*",
+      "resourceUri": "resourceUriSkillset",
+      "apiKey": "apiKeySkillset",
+      "deploymentId": "text-embedding-3-small",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/chunks/*/chunk"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "embedding",
+          "targetName": "chunk_vector"
+        }
+      ],
+      "authIdentity": null
+    }
+  ],
+  "cognitiveServices": null,
+  "knowledgeStore": null,
+  "indexProjections": {
+    "selectors": [
+      {
+        "targetIndexName": "index-oai",
+        "parentKeyFieldName": "parent_id",
+        "sourceContext": "/document/chunks/*",
+        "mappings": [
+          {
+            "name": "Material",
+            "source": "/document/chunks/*/Material",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "FileName",
+            "source": "/document/chunks/*/FileName",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "FileText",
+            "source": "/document/chunks/*/FileText",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "chunk",
+            "source": "/document/chunks/*/chunk",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "MetalName",
+            "source": "/document/chunks/*/MetalName",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "chunk_vector",
+            "source": "/document/chunks/*/chunk_vector",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "parent_filename",
+            "source": "/document/chunks/*/parent_filename",
+            "sourceContext": null,
+            "inputs": []
+          },
+          {
+            "name": "parent_url",
+            "source": "/document/chunks/*/parent_url",
+            "sourceContext": null,
+            "inputs": []
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "projectionMode": "skipIndexingParentDocuments"
+    }
+  },
+  "encryptionKey": null
+}

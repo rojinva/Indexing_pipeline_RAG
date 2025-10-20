@@ -1,0 +1,162 @@
+trigger:
+  branches:
+    include:
+      - dev
+      - qa
+  paths:
+    include:
+      - src/search_service/skills/*
+
+pool:
+  name: DSML-pool
+
+variables:
+  - group: 'Security-Scan-Variable'
+  - name: NODE_EXTRA_CA_CERTS
+    value: '/home/svc_ado/adoagent/sonarRootFirst.crt'
+  - name: JAVA_HOME
+    value: '/usr/lib/jvm/java-17'
+ 
+jobs:
+  - job: DeployFunctionApp
+    displayName: "Deploy Function App"
+    steps:
+      - checkout: self
+        submodules: true
+      
+      - task: SonarSource.sonarqube.15B84CA1-B62F-4A2A-A403-89B77A063157.SonarQubePrepare@5
+        displayName: 'Prepare analysis on SonarQube'
+        inputs:
+          SonarQube: 'lam-devops-dshub-SonarQube-conn'
+          scannerMode: CLI
+          configMode: manual
+          cliProjectKey: 'DS_Hub_ent-openai-search-index_926ae6de-bd86-48da-a94e-8c18732be745'
+          cliProjectName: 'ent-openai-search-index'
+          cliProjectVersion: '$(Build.SourceBranchName)'
+
+      - script: |
+          echo "Current working directory = $(System.DefaultWorkingDirectory)"
+          ls -lt $(System.DefaultWorkingDirectory)
+
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip3 install -r ./src/search_service/skills/requirements.txt
+          echo "Installed the requirements"
+        displayName: "Install Dependencies"
+
+      - task: SonarQubeAnalyze@5
+        displayName: "Run Code Analysis"
+        inputs:
+          jdkversion: 'JAVA_HOME'
+          
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: |
+            echo 'Create a virtual environment to install python package for blackduck scan'
+            python3 -m venv GIS_SILK_ent-openai-search-index
+            ls
+            source GIS_SILK_ent-openai-search-index/bin/activate
+            cd GIS_SILK_ent-openai-search-index
+            echo "List what is inside the new virtual environment"
+            ls
+            echo "Installing the python packages in requirements.txt"
+            pip3 install -r '$(System.DefaultWorkingDirectory)/requirements.txt'
+            pip list
+            bash <(curl -s -L https://detect.synopsys.com/detect9.sh) --blackduck.url=$(blackduck.url) --blackduck.api.token=$(blackduck.api.token) --blackduck.trust.cert=true --detect.project.name=GIS_SILK_ent-openai-search-index --detect.project.version.name=$(Build.SourceBranchName) --detect.python.pip.requirements=true --logging.level.detect=DEBUG --detect.cleanup=false --detect.diagnostic=true --detect.accuracy.required=NONE --detect.source.path=$(System.DefaultWorkingDirectory)
+
+      # - task: SynopsysDetectTask@9
+      #   inputs:
+      #     BlackDuckService: 'BlackDuck'
+      #     DetectArguments: |
+      #       --blackduck.trust.cert=true
+      #       --detect.pipRequirementsPath=./requirements.txt 
+      #       --detect.project.name=GIS_SILK_ent-openai-search-index
+      #       --detect.project.version.name=$(Build.SourceBranchName)
+      #       --detect.python.python3=true
+      #       --detect.python.path=/usr/bin/python3
+      #       --detect.pip.path=/bin/pip3
+      #       --detect.detector.search.continue=true
+      #       --detect.source.path=$(System.DefaultWorkingDirectory)
+      #       --detect.excluded.patterns=*.ipynb
+      #       --blackduck.signature.scanner.exclusion.patterns="$(System.DefaultWorkingDirectory)/notebooks"
+      #     DetectVersion: 'latest'
+      #   displayName: "Run Synopsys Detect for your build"
+        
+      - script: |
+          echo "Artifact staging directory = $(Build.ArtifactStagingDirectory)"
+          echo "System Working Directory = $(System.DefaultWorkingDirectory)"
+          pwd
+          ls
+          cd ./src/search_service/skills
+          zip -r $(Build.ArtifactStagingDirectory)/functionapp.zip .
+          ls -lt $(Build.ArtifactStagingDirectory)
+        displayName: "Zip Function App Files"
+
+      - script: |
+          unzip -l $(Build.ArtifactStagingDirectory)/functionapp.zip
+        displayName: 'List Contents of Zip File'
+
+      - task: AzureFunctionApp@1
+        inputs:
+          azureSubscription: "lam-devops-dshub-dev-conn"
+          appType: "functionAppLinux"
+          appName: "fn-lam-usw-oai-dev-eng-01"
+          package: "$(Build.ArtifactStagingDirectory)/functionapp.zip"
+          startupCommand: "/home/site/scripts/install-libreoffice.sh > /home/site/logs/startup.log 2>&1"  # Path to the script in the function app
+        displayName: "DEV Deploy to Azure Function App"
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+#      - task: AzureCLI@2
+#        inputs:
+#            azureSubscription: 'lam-devops-dshub-dev-conn'  # Your Azure subscription
+#            scriptType: 'bash'
+#            scriptLocation: 'inlineScript'
+#            inlineScript: |
+#              # Navigate to the function app's Kudu console this command is in preview
+#              az webapp ssh --name fn-lam-usw-oai-dev-eng-01 --resource-group rg-lam-usw-oai-dev-eng-01
+#      
+#              # Run commands to install libreoffice-common
+#              sudo apt-get update
+#              sudo apt-get install -y libreoffice-common
+#        displayName: 'Install LibreOffice in Azure Function App'
+#      - script: |
+#          echo "Waiting for 1 minute to ensure the Azure Function App is available..."
+#          sleep 60  # Wait for 60 seconds
+
+#          echo "Connecting to the server and installing LibreOffice..."
+#          ssh -t -o StrictHostKeyChecking=no -p 2222 root@169.254.130.2 << 'EOF'
+#          apt-get install -y libreoffice-common
+#          EOF
+#        displayName: 'Install LibreOffice via SSH'
+#      - task: AzureCLI@2
+#        inputs:
+#          azureSubscription: "lam-devops-dshub-dev-conn"
+#          scriptType: 'bash'
+#          scriptLocation: 'inlineScript'
+#          inlineScript: |
+#            echo "Connecting to Azure Function App and attempting to install LibreOffice..."
+#            az functionapp run-command invoke --name fn-lam-usw-oai-dev-eng-01 --resource-group rg-lam-usw-oai-dev-eng-01 --command "apt-get update && apt-get install -y libreoffice"
+#        displayName: "Install LibreOffice via Azure CLI"
+      - script: |
+          echo "Validating LibreOffice installation..."
+          libreoffice --version
+        displayName: "Validate LibreOffice Installation"
+        condition: succeeded()
+
+      - task: AzureFunctionApp@1
+        inputs:
+          azureSubscription: "lam-devops-dshub-qa-conn"
+          appType: "functionAppLinux"
+          appName: "fn-lam-usw-oai-qa-eng-01"
+          package: "$(Build.ArtifactStagingDirectory)/functionapp.zip"
+        displayName: "QA Deploy to Azure Function App"
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/qa'))
+
+      - task: AzureFunctionApp@1
+        inputs:
+          azureSubscription: "lam-devops-dshub-prd-conn"
+          appType: "functionAppLinux"
+          appName: "fn-lam-usw-oai-prd-eng-01"
+          package: "$(Build.ArtifactStagingDirectory)/functionapp.zip"
+        displayName: "PRD Deploy to Azure Function App"
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))

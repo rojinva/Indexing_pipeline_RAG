@@ -1,0 +1,18 @@
+{
+  "@odata.context": "https://srch-lam-usw-oai-dev-eng-03.search.windows.net/$metadata#datasources/$entity",
+  "@odata.etag": "\"0x8DDD4F7FABCD93D\"",
+  "name": "datasource-oai",
+  "description": null,
+  "type": "azuresql",
+  "subtype": "sqliaas",
+  "credentials": {
+    "connectionString": "Data Source=tcp:3n4ybeiczeuu5mrms5secdidou-xgkh7c6jryouhjyjnogaoml6r4.datawarehouse.fabric.microsoft.com,1433;Initial Catalog=lhb_glb;User ID=...;Password=...;Connect Timeout=15;Encrypt=True;Trust Server Certificate=False;Authentication=ActiveDirectoryServicePrincipal"
+  },
+  "container": {
+    "name": "[eng].[nw_page]"
+  },
+  "dataChangeDetectionPolicy": null,
+  "dataDeletionDetectionPolicy": null,
+  "encryptionKey": null,
+  "identity": null
+}

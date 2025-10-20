@@ -1,0 +1,17 @@
+{
+  "name": "datasource-oai",
+  "description": null,
+  "type": "azuresql",
+  "subtype": null,
+  "credentials": {
+    "connectionString": "openai-synapse-connectionstring"
+  },
+  "container": {
+    "name": "eng.nw_page",
+    "query": "SELECT DISTINCT p.page_title as parent_filename, r.rev_text_id as chunk_id, CAST(t.old_text AS VARCHAR(MAX)) as chunk FROM eng.nw_page AS p JOIN eng.nw_revision AS r ON r.rev_page = p.page_id JOIN eng.nw_text AS t ON r.rev_text_id = t.old_id"
+  },
+  "dataChangeDetectionPolicy": null,
+  "dataDeletionDetectionPolicy": null,
+  "encryptionKey": null,
+  "identity": null
+}

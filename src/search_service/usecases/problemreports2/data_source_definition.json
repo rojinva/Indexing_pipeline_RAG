@@ -1,0 +1,17 @@
+{
+  "name": "datasource-oai",
+  "description": null,
+  "type": "azuresql",
+  "subtype": null,
+  "credentials": {
+    "connectionString": "openai-synapse-connectionstring"
+  },
+  "container": {
+    "name": "openai-synapse-sql-table-problem-reports-design-insights", 
+    "query": "openai-synapse-sql-query-problem-reports-design-insights"
+  },
+  "dataChangeDetectionPolicy": null,
+  "dataDeletionDetectionPolicy": null,
+  "encryptionKey": null,
+  "identity": null
+}
